@@ -18,8 +18,10 @@ Select an option :
 
 ## Installation
 
+Read the install script before running it
+
 ```
-curl https://raw.githubusercontent.com/sundowndev/covermyass/master/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/sundowndev/covermyass/master/install.sh | bash
 ```
 
 ## Usage
