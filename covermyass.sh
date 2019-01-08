@@ -68,15 +68,24 @@ elif [[ $option == 2 ]]; then
         echo "Permenently disabled bash log."
 elif [[ $option == 3 ]]; then
         # Restore default settings
-        #ln /dev/null ~/.bash_history -sf
-        echo "[+] Disabled sending history to /dev/null"
+        if [[ -L ~/.bash_history ]]; then
+                rm ~/.bash_history -rf
+                echo "" > ~/.bash_history
+                echo "[+] Disabled sending history to /dev/null"
+        fi
+
+        if [[ -L ~/.zsh_history ]]; then
+                rm ~/.zsh_history -rf
+                echo "" > ~/.zsh_history
+                echo "[+] Disabled sending zsh history to /dev/null"
+        fi
 
         export HISTFILESIZE=""
         export HISTSIZE=50000
         echo "[+] Restore HISTFILESIZE & HISTSIZE default values"
 
         echo
-        echo "Permenently enabeld bash log."
+        echo "Permenently enabled bash log."
 elif [[ $option == 99 ]]; then
         exit 1
 else
