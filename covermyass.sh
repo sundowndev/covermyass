@@ -70,10 +70,9 @@ elif [[ $option == 3 ]]; then
         # Restore default settings
         if [[ -L ~/.bash_history ]]; then
                 rm -rf ~/.bash_history
+                echo "" > ~/.bash_history
                 echo "[+] Disabled sending history to /dev/null"
         fi
-
-        echo "" > ~/.bash_history
 
         if [[ -L ~/.zsh_history ]]; then
                 rm -rf ~/.zsh_history
@@ -83,7 +82,7 @@ elif [[ $option == 3 ]]; then
 
         export HISTFILESIZE=""
         export HISTSIZE=50000
-        echo "[+] Restore HISTFILESIZE & HISTSIZE default values"
+        echo "[+] Restore HISTFILESIZE & HISTSIZE default values."
 
         # set +o history # Undo this
 
