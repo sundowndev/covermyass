@@ -8,9 +8,10 @@ function isRoot () {
 
 if ! isRoot; then
   echo "You need to run this as root!"
+  exit 1
 fi
 
-wget -O /usr/bin/covermyass https://raw.githubusercontent.com/sundowndev/covermyass/master/covermyass.sh
-chmod +x /usr/bin/covermyass
+sudo wget -O /usr/bin/covermyass https://raw.githubusercontent.com/sundowndev/covermyass/master/covermyass.sh
+sudo chmod +x /usr/bin/covermyass
 
 echo "Installation succeeded."
