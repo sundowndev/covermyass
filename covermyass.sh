@@ -21,7 +21,7 @@ echo "4) Restore settings to default"
 echo "99) Exit tool"
 echo
 
-printf "Choice: "
+printf "> "
 read -r option
 echo
 
@@ -29,12 +29,20 @@ if [[ $option == 1 ]]; then
         # Clear current history
         if [ -w /var/log/auth.log ]; then
                 echo "" > /var/log/auth.log
+                echo "/var/log/auth.log cleaned."
         else
                 echo "[!] /var/log/auth.log is not writable! Retry using sudo."
         fi
         
+        if [ -a ~/.zsh_history ]; then
+                echo "" > ~/.zsh_history
+                echo "~/.zsh_history cleaned."
+        fi
+
         echo "" > ~/.bash_history
         rm ~/.bash_history -rf
+        echo "~/.bash_history cleaned."
+        
         history -c
         
         echo "Bash history cleaned."
