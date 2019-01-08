@@ -1,6 +1,6 @@
 # Cover my ass
 
-CLI tool to cover your tracks on UNIX systems.
+CLI tool to cover your tracks on UNIX systems. Designed for CTF post exploitation phase, when you need to cover your tracks and exit the infected server.
 
 ```
 Welcome to Cover my ass tool !
