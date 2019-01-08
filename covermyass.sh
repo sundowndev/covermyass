@@ -39,7 +39,6 @@ if [[ $option == 1 ]]; then
         fi
 
         echo "" > ~/.bash_history
-        rm ~/.bash_history -rf
         echo "[+] ~/.bash_history cleaned."
 
         history -c
