@@ -2,23 +2,35 @@
 
 CLI tool to cover your tracks on UNIX systems. Designed for CTF post exploitation phase, when you need to cover your tracks and exit the infected server. Or, even better, permanently disable bash & auth history.
 
+**This tool supports zsh shell.**
+
 ## Installation
 
-Read the install script before running it
+Read the install script before running it. You'll need sudo privileges.
 
 ```
 curl -sSL https://raw.githubusercontent.com/sundowndev/covermyass/master/install.sh | bash
 ```
+
+Without sudo :
+
+```
+cd $HOME
+curl -sSL https://raw.githubusercontent.com/sundowndev/covermyass/master/covermyass.sh -o ./covermyass
+chmod +x ./covermyass
+```
+
+Keep in mind that without sudo privileges, you'll be unable to clean auth logs.
 
 ## Usage
 
 Simply type :
 
 ```
-covermyass
+covermyass # use sudo if you want to clean auth logs
 ```
 
-Use the menu :
+Follow the instructions :
 
 ```
 Welcome to Cover my ass tool !
