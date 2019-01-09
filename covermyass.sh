@@ -63,6 +63,7 @@ elif [[ $option == 2 ]]; then
         echo "[+] Set HISTFILESIZE & HISTSIZE to 0"
 
         set +o history
+        echo "[+] Disabled history library"
 
         echo
         echo "Permenently disabled bash log."
@@ -84,7 +85,8 @@ elif [[ $option == 3 ]]; then
         export HISTSIZE=50000
         echo "[+] Restore HISTFILESIZE & HISTSIZE default values."
 
-        # set +o history # Undo this
+        set -o history
+        echo "[+] Enabled history library"
 
         echo
         echo "Permenently enabled bash log."
