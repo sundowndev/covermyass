@@ -59,7 +59,6 @@ elif [[ $option == 2 ]]; then
 
         export HISTFILESIZE=0
         export HISTSIZE=0
-        unset HISTFILE
         echo "[+] Set HISTFILESIZE & HISTSIZE to 0"
 
         set +o history
