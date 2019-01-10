@@ -48,6 +48,13 @@ if [[ $option == 1 ]]; then
         echo "Reminder: your need to reload the session to see effects."
         echo "Type exit to do so."
 elif [[ $option == 2 ]]; then
+        if [ -w /var/log/auth.log ]; then
+                ln /dev/null /var/log/auth.log -sf
+                echo "[+] Permanently sending /var/log/auth.log to /dev/null"
+        else
+                echo "[!] /var/log/auth.log is not writable! Retry using sudo."
+        fi
+        
         # Permenently disable bash log
         ln /dev/null ~/.bash_history -sf
         echo "[+] Permanently sending bash_history to /dev/null"
@@ -67,6 +74,12 @@ elif [[ $option == 2 ]]; then
         echo
         echo "Permenently disabled bash log."
 elif [[ $option == 3 ]]; then
+        if [ -w /var/log/auth.log && -L /var/log/auth.log ]; then
+                rm -rf /var/log/auth.log
+                echo "" > /var/log/auth.log
+                echo "[+] Disabled sending auth logs to /dev/null"
+        fi
+        
         # Restore default settings
         if [[ -L ~/.bash_history ]]; then
                 rm -rf ~/.bash_history
