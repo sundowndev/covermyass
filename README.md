@@ -1,6 +1,6 @@
 # Cover my ass
 
-CLI tool to cover your tracks on UNIX systems. Designed for CTF post exploitation phase, when you need to cover your tracks and exit the infected server. Or, even better, permanently disable bash & auth history.
+CLI tool to cover your tracks on UNIX systems. Designed for pen testing "Covering Tracks" phase, before exiting the infected server. Or, even better, permanently disable bash & auth history.
 
 **This tool supports zsh shell.**
 
