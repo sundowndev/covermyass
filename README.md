@@ -27,7 +27,7 @@ Keep in mind that without sudo privileges, you'll be unable to clean auth logs.
 Simply type :
 
 ```
-covermyass # use sudo if you want to clean auth logs
+covermyass # you may need to use sudo if you want to clean auth logs
 ```
 
 Follow the instructions :
@@ -37,10 +37,24 @@ Welcome to Cover my ass tool !
 
 Select an option :
 
-1) Clear auth & bash history for user sundowndev
-2) Permenently disable bash log
+1) Clear auth & bash history for user root
+2) Permenently disable auth & bash history
 3) Restore settings to default
 99) Exit tool
 
 >
+```
+
+Clear auth & history instantly
+
+```
+covermyass now
+```
+
+### Using cron job
+
+Clear auth & bash history every day at 5am
+
+```
+0 5 * * * covermyass now >/dev/null 2>&1
 ```
