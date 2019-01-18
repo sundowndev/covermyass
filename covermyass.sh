@@ -120,7 +120,7 @@ function exitTool () {
 clear # Clear output
 
 # "now" option
-if [ -n "$1" ] && [ $1 == 'now' ]; then
+if [ -n "$1" ] && [ "$1" == 'now' ]; then
         clearAuth
         clearHistory
         exitTool
