@@ -1,3 +1,6 @@
 os: linux
 
-script: echo "test" && exit 1
+script:
+- chmod +x *.sh
+- ./install.sh
+- shellcheck covermyass
