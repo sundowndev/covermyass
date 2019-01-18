@@ -2,5 +2,5 @@ os: linux
 
 script:
 - chmod +x *.sh
-- ./install.sh
+- sudo ./install.sh
 - shellcheck covermyass
