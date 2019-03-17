@@ -1,8 +1,10 @@
-# Cover my ass
+# Covermyass
+
+![Build status](https://img.shields.io/travis/sundowndev/covermyass/master.svg?style=flat-square)
 
 CLI tool to cover your tracks on UNIX systems. Designed for pen testing "Covering Tracks" phase, before exiting the infected server. Or, even better, permanently disable bash & auth history.
 
-**This tool supports zsh shell.**
+**This tool supports zsh & bash shell.**
 
 ## Installation
 
@@ -45,15 +47,17 @@ Select an option :
 >
 ```
 
-Clear auth & history instantly
+*NOTE: don't forget to exit the terminal session as the history is cached.*
+
+Clear auth & history instantly :
 
 ```
-covermyass now
+sudo covermyass now
 ```
 
 ### Using cron job
 
-Clear auth & bash history every day at 5am
+Clear bash history every day at 5am :
 
 ```
 0 5 * * * covermyass now >/dev/null 2>&1
