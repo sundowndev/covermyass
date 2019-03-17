@@ -3,4 +3,4 @@ os: linux
 script:
 - chmod +x *.sh
 - sudo ./install.sh
-- shellcheck covermyass
+- shellcheck covermyass.sh
