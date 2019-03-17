@@ -1,5 +1,24 @@
 #!/usr/bin/env bash
 
+LOGS_FILES=(
+        /var/log/messages
+        /var/log/auth.log
+        /var/log/kern.log
+        /var/log/cron.log
+        /var/log/maillog
+        /var/log/boot.log
+        /var/log/mysqld.log
+        /var/log/secure
+        /var/log/utmp
+        /var/log/yum.log
+        /var/log/system.log
+        /var/log/DiagnosticMessages
+        /Library/Logs
+        ~/Library/Logs
+        /Library/Logs/DiagnosticReports
+        ~/Library/Logs/DiagnosticReports
+)
+
 function isRoot () {
         if [ "$EUID" -ne 0 ]; then
                 return 1
@@ -87,13 +106,25 @@ function enableHistory () {
         echo "Permenently enabled bash log."
 }
 
-function clearAuth () {
-        if [ -w /var/log/auth.log ]; then
-                echo "" > /var/log/auth.log
-                echo "[+] /var/log/auth.log cleaned."
-        else
-                echo "[!] /var/log/auth.log is not writable! Retry using sudo."
-        fi
+function clearLogs () {
+        for i in ${LOGS_FILES[@]}
+        do
+                if [ -f $i ]; then
+                        if [ -w $i ]; then
+                                echo "" > $i
+                                echo "[+] $i cleaned."
+                        else
+                                echo "[!] $i is not writable! Retry using sudo."
+                        fi
+                elif [ -d $i ]; then
+                        if [ -w $i ]; then
+                                rm -rf $i/*
+                                echo "[+] $i cleaned."
+                        else
+                                echo "[!] $i is not writable! Retry using sudo."
+                        fi
+                fi
+        done
 }
 
 function clearHistory () {
@@ -117,11 +148,11 @@ function exitTool () {
         exit 1
 }
 
-clear # Clear output
+# clear # Clear output
 
 # "now" option
 if [ -n "$1" ] && [ "$1" == 'now' ]; then
-        clearAuth
+        clearLogs
         clearHistory
         exitTool
 fi
@@ -130,7 +161,7 @@ menu
 
 if [[ $option == 1 ]]; then
         # Clear current history
-        clearAuth
+        clearLogs
         clearHistory
 elif [[ $option == 2 ]]; then
         # Permenently disable auth & bash log
