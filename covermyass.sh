@@ -1,5 +1,28 @@
 #!/usr/bin/env bash
 
+LOGS_FILES=(
+        /var/log/messages # General message and system related stuff
+        /var/log/auth.log # Authenication logs
+        /var/log/kern.log # Kernel logs
+        /var/log/cron.log # Crond logs
+        /var/log/maillog # Mail server logs
+        /var/log/boot.log # System boot log
+        /var/log/mysqld.log # MySQL database server log file
+        /var/log/qmail # Qmail log directory
+        /var/log/httpd # Apache access and error logs directory
+        /var/log/lighttpd # Lighttpd access and error logs directory
+        /var/log/secure # Authentication log
+        /var/log/utmp # Login records file
+        /var/log/wtmp # Login records file
+        /var/log/yum.log # Yum command log file
+        /var/log/system.log # System Log
+        /var/log/DiagnosticMessages # Mac Analytics Data
+        /Library/Logs # System Application Logs
+        /Library/Logs/DiagnosticReports # System Reports
+        ~/Library/Logs # User Application Logs
+        ~/Library/Logs/DiagnosticReports # User Reports
+)
+
 function isRoot () {
         if [ "$EUID" -ne 0 ]; then
                 return 1
@@ -13,7 +36,7 @@ function menu () {
         echo
         echo "Select an option :"
         echo
-        echo "1) Clear auth & bash history for user $USER"
+        echo "1) Clear logs for user $USER"
         echo "2) Permenently disable auth & bash history"
         echo "3) Restore settings to default"
         echo "99) Exit tool"
@@ -37,7 +60,7 @@ function disableHistory () {
         ln /dev/null ~/.bash_history -sf
         echo "[+] Permanently sending bash_history to /dev/null"
 
-        if [ -a ~/.zsh_history ]; then
+        if [ -f ~/.zsh_history ]; then
                 ln /dev/null ~/.zsh_history -sf
                 echo "[+] Permanently sending zsh_history to /dev/null"
         fi
@@ -87,17 +110,29 @@ function enableHistory () {
         echo "Permenently enabled bash log."
 }
 
-function clearAuth () {
-        if [ -w /var/log/auth.log ]; then
-                echo "" > /var/log/auth.log
-                echo "[+] /var/log/auth.log cleaned."
-        else
-                echo "[!] /var/log/auth.log is not writable! Retry using sudo."
-        fi
+function clearLogs () {
+        for i in "${LOGS_FILES[@]}"
+        do
+                if [ -f "$i" ]; then
+                        if [ -w "$i" ]; then
+                                echo "" > "$i"
+                                echo "[+] $i cleaned."
+                        else
+                                echo "[!] $i is not writable! Retry using sudo."
+                        fi
+                elif [ -d "$i" ]; then
+                        if [ -w "$i" ]; then
+                                rm -rf "${i:?}"/*
+                                echo "[+] $i cleaned."
+                        else
+                                echo "[!] $i is not writable! Retry using sudo."
+                        fi
+                fi
+        done
 }
 
 function clearHistory () {
-        if [ -a ~/.zsh_history ]; then
+        if [ -f ~/.zsh_history ]; then
                 echo "" > ~/.zsh_history
                 echo "[+] ~/.zsh_history cleaned."
         fi
@@ -121,7 +156,7 @@ clear # Clear output
 
 # "now" option
 if [ -n "$1" ] && [ "$1" == 'now' ]; then
-        clearAuth
+        clearLogs
         clearHistory
         exitTool
 fi
@@ -129,8 +164,8 @@ fi
 menu
 
 if [[ $option == 1 ]]; then
-        # Clear current history
-        clearAuth
+        # Clear logs & current history
+        clearLogs
         clearHistory
 elif [[ $option == 2 ]]; then
         # Permenently disable auth & bash log
