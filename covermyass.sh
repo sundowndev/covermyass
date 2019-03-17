@@ -111,18 +111,18 @@ function enableHistory () {
 }
 
 function clearLogs () {
-        for i in ${LOGS_FILES[@]}
+        for i in "${LOGS_FILES[@]}"
         do
-                if [ -f $i ]; then
-                        if [ -w $i ]; then
-                                echo "" > $i
+                if [ -f "$i" ]; then
+                        if [ -w "$i" ]; then
+                                echo "" > "$i"
                                 echo "[+] $i cleaned."
                         else
                                 echo "[!] $i is not writable! Retry using sudo."
                         fi
-                elif [ -d $i ]; then
-                        if [ -w $i ]; then
-                                rm -rf $i/*
+                elif [ -d "$i" ]; then
+                        if [ -w "$i" ]; then
+                                rm -rf "${i:?}"/*
                                 echo "[+] $i cleaned."
                         else
                                 echo "[!] $i is not writable! Retry using sudo."
