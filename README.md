@@ -22,6 +22,7 @@ This tool allows you to clear log files such as :
 - `/var/log/secure` or `/var/log/auth.log` : Authentication log
 - `/var/log/utmp` or `/var/log/wtmp` : Login records file
 - `/var/log/yum.log` : Yum command log file.
+- `~/.bash_history` and `~/.zsh_history` : User commands history
 
 **macOS**
 
@@ -51,7 +52,7 @@ curl -sSL https://raw.githubusercontent.com/sundowndev/covermyass/master/covermy
 chmod +x ./covermyass
 ```
 
-Keep in mind that without sudo privileges, you'll be unable to clean auth logs.
+Keep in mind that without sudo privileges, you *might* be unable to system level log files (`/var/log`).
 
 ## Usage
 
@@ -68,7 +69,7 @@ Welcome to Cover my ass tool !
 
 Select an option :
 
-1) Clear auth & bash history for user root
+1) Clear logs for user root
 2) Permenently disable auth & bash history
 3) Restore settings to default
 99) Exit tool
@@ -78,7 +79,7 @@ Select an option :
 
 *NOTE: don't forget to exit the terminal session since the bash history is cached.*
 
-Clear auth & history instantly :
+Clear logs instantly (requires *sudo* to be efficient) :
 
 ```
 sudo covermyass now
