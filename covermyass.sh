@@ -1,22 +1,26 @@
 #!/usr/bin/env bash
 
 LOGS_FILES=(
-        /var/log/messages
-        /var/log/auth.log
-        /var/log/kern.log
-        /var/log/cron.log
-        /var/log/maillog
-        /var/log/boot.log
-        /var/log/mysqld.log
-        /var/log/secure
-        /var/log/utmp
-        /var/log/yum.log
-        /var/log/system.log
-        /var/log/DiagnosticMessages
-        /Library/Logs
-        ~/Library/Logs
-        /Library/Logs/DiagnosticReports
-        ~/Library/Logs/DiagnosticReports
+        /var/log/messages # General message and system related stuff
+        /var/log/auth.log # Authenication logs
+        /var/log/kern.log # Kernel logs
+        /var/log/cron.log # Crond logs
+        /var/log/maillog # Mail server logs
+        /var/log/boot.log # System boot log
+        /var/log/mysqld.log # MySQL database server log file
+        /var/log/qmail # Qmail log directory
+        /var/log/httpd # Apache access and error logs directory
+        /var/log/lighttpd # Lighttpd access and error logs directory
+        /var/log/secure # Authentication log
+        /var/log/utmp # Login records file
+        /var/log/wtmp # Login records file
+        /var/log/yum.log # Yum command log file
+        /var/log/system.log # System Log
+        /var/log/DiagnosticMessages # Mac Analytics Data
+        /Library/Logs # System Application Logs
+        /Library/Logs/DiagnosticReports # System Reports
+        ~/Library/Logs # User Application Logs
+        ~/Library/Logs/DiagnosticReports # User Reports
 )
 
 function isRoot () {
@@ -56,7 +60,7 @@ function disableHistory () {
         ln /dev/null ~/.bash_history -sf
         echo "[+] Permanently sending bash_history to /dev/null"
 
-        if [ -a ~/.zsh_history ]; then
+        if [ -f ~/.zsh_history ]; then
                 ln /dev/null ~/.zsh_history -sf
                 echo "[+] Permanently sending zsh_history to /dev/null"
         fi
@@ -128,7 +132,7 @@ function clearLogs () {
 }
 
 function clearHistory () {
-        if [ -a ~/.zsh_history ]; then
+        if [ -f ~/.zsh_history ]; then
                 echo "" > ~/.zsh_history
                 echo "[+] ~/.zsh_history cleaned."
         fi
@@ -148,7 +152,7 @@ function exitTool () {
         exit 1
 }
 
-# clear # Clear output
+clear # Clear output
 
 # "now" option
 if [ -n "$1" ] && [ "$1" == 'now' ]; then
