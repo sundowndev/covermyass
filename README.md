@@ -7,34 +7,31 @@ CLI tool to cover your tracks on UNIX systems. Designed for pen testing "Coverin
 
 This tool allows you to clear log files such as :
 
-**Linux**
+```bash
+# Linux
+/var/log/messages # General message and system related stuff
+/var/log/auth.log # Authenication logs
+/var/log/kern.log # Kernel logs
+/var/log/cron.log # Crond logs
+/var/log/maillog # Mail server logs
+/var/log/boot.log # System boot log
+/var/log/mysqld.log # MySQL database server log file
+/var/log/qmail # Qmail log directory
+/var/log/httpd # Apache access and error logs directory
+/var/log/lighttpd # Lighttpd access and error logs directory
+/var/log/secure # Authentication log
+/var/log/utmp # Login records file
+/var/log/wtmp # Login records file
+/var/log/yum.log # Yum command log file
 
-- `/var/log/messages` : General message and system related stuff
-- `/var/log/auth.log` : Authenication logs
-- `/var/log/kern.log` : Kernel logs
-- `/var/log/cron.log` : Crond logs (cron job)
-- `/var/log/maillog` : Mail server logs
-- `/var/log/qmail/` : Qmail log directory (more files inside this directory)
-- `/var/log/httpd/` : Apache access and error logs directory
-- `/var/log/lighttpd/` : Lighttpd access and error logs directory
-- `/var/log/boot.log` : System boot log
-- `/var/log/mysqld.log` : MySQL database server log file
-- `/var/log/secure` or `/var/log/auth.log` : Authentication log
-- `/var/log/utmp` or `/var/log/wtmp` : Login records file
-- `/var/log/yum.log` : Yum command log file.
-- `~/.bash_history` and `~/.zsh_history` : User commands history
-
-**macOS**
-
-- `/var/log` : System Log Folder
-- `/var/log/system.log` : System Log
-- `/var/log/DiagnosticMessages` : Mac Analytics Data
-- `/Library/Logs` : System Application Logs
-- `/Library/Logs/DiagnosticReports` : System Reports
-- `~/Library/Logs` : User Application Logs (in other words, /Users/NAME/Library/Logs)
-- `~/Library/Logs/DiagnosticReports` : User Reports (in other words, /Users/NAME/Library/Logs/DiagnosticReports)
-
-**This tool supports zsh & bash shell.**
+# macOS
+/var/log/system.log # System Log
+/var/log/DiagnosticMessages # Mac Analytics Data
+/Library/Logs # System Application Logs
+/Library/Logs/DiagnosticReports # System Reports
+~/Library/Logs # User Application Logs
+~/Library/Logs/DiagnosticReports # User Reports
+```
 
 ## Installation
 
