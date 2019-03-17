@@ -36,7 +36,7 @@ function menu () {
         echo
         echo "Select an option :"
         echo
-        echo "1) Clear auth & bash history for user $USER"
+        echo "1) Clear logs for user $USER"
         echo "2) Permenently disable auth & bash history"
         echo "3) Restore settings to default"
         echo "99) Exit tool"
@@ -164,7 +164,7 @@ fi
 menu
 
 if [[ $option == 1 ]]; then
-        # Clear current history
+        # Clear logs & current history
         clearLogs
         clearHistory
 elif [[ $option == 2 ]]; then
