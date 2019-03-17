@@ -1,7 +1,7 @@
 # Covermyass
 
-![Build status](https://img.shields.io/travis/sundowndev/covermyass/master.svg?style=flat-square)
-![Tag](https://img.shields.io/github/tag/SundownDEV/covermyass.svg?style=flat-square)
+[![Build status](https://img.shields.io/travis/sundowndev/covermyass/master.svg?style=flat-square)](https://travis-ci.org/sundowndev/covermyass/builds)
+[![Tag](https://img.shields.io/github/tag/SundownDEV/covermyass.svg?style=flat-square)](https://github.com/sundowndev/covermyass/releases)
 
 CLI tool to cover your tracks on UNIX systems. Designed for pen testing "Covering Tracks" phase, before exiting the infected server. Or, even better, permanently disable system logs for post-exploitation.
 
