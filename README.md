@@ -3,9 +3,11 @@
 ![Build status](https://img.shields.io/travis/sundowndev/covermyass/master.svg?style=flat-square)
 ![Tag](https://img.shields.io/github/tag/SundownDEV/covermyass.svg?style=flat-square)
 
-CLI tool to cover your tracks on UNIX systems. Designed for pen testing "Covering Tracks" phase, before exiting the infected server. Or, even better, permanently disable bash & auth history.
+CLI tool to cover your tracks on UNIX systems. Designed for pen testing "Covering Tracks" phase, before exiting the infected server. Or, even better, permanently disable system logs for post-exploitation.
 
 This tool allows you to clear log files such as :
+
+**Linux**
 
 - `/var/log/messages` : General message and system related stuff
 - `/var/log/auth.log` : Authenication logs
@@ -20,6 +22,16 @@ This tool allows you to clear log files such as :
 - `/var/log/secure` or `/var/log/auth.log` : Authentication log
 - `/var/log/utmp` or `/var/log/wtmp` : Login records file
 - `/var/log/yum.log` : Yum command log file.
+
+**macOS**
+
+- `/var/log` : System Log Folder
+- `/var/log/system.log` : System Log
+- `/var/log/DiagnosticMessages` : Mac Analytics Data
+- `/Library/Logs` : System Application Logs
+- `/Library/Logs/DiagnosticReports` : System Reports
+- `~/Library/Logs` : User Application Logs (in other words, /Users/NAME/Library/Logs)
+- `~/Library/Logs/DiagnosticReports` : User Reports (in other words, /Users/NAME/Library/Logs/DiagnosticReports)
 
 **This tool supports zsh & bash shell.**
 
