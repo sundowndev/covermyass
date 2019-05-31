@@ -1,6 +1,8 @@
 os: linux
 
+before_script:
+  - chmod +x covermyass
+  - shellcheck covermyass.sh
+
 script:
-- chmod +x *.sh
-- sudo ./install.sh
-- shellcheck covermyass.sh
+  - sudo covermyass now
