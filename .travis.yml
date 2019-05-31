@@ -1,8 +1,9 @@
 os: linux
 
 before_script:
-  - chmod +x covermyass
-  - shellcheck covermyass
+  - shellcheck ./covermyass
+  - sudo cp covermyass /usr/bin/covermyass
+  - chmod +x /usr/bin/covermyass
 
 script:
   - sudo covermyass now
