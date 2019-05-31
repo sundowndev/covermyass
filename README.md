@@ -35,18 +35,21 @@ This tool allows you to clear log files such as :
 
 ## Installation
 
-Read the install script before running it. You'll need sudo privileges.
+With sudo
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/sundowndev/covermyass/master/install.sh | bash
+sudo curl https://raw.githubusercontent.com/sundowndev/covermyass/master/covermyass -o /usr/bin/covermyass
+sudo chmod +x /usr/bin/covermyass
 ```
 
 Without sudo :
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/sundowndev/covermyass/master/covermyass.sh -o ~/.local/bin/covermyass
+curl -sSL https://raw.githubusercontent.com/sundowndev/covermyass/master/covermyass -o ~/.local/bin/covermyass
 chmod +x ~/.local/bin/covermyass
 ```
+
+You can now use the tool using the executable.
 
 Keep in mind that without sudo privileges, you *might* be unable to clear system-level log files (`/var/log`).
 
