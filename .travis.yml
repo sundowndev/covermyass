@@ -3,7 +3,7 @@ os: linux
 before_script:
   - shellcheck ./covermyass
   - sudo cp covermyass /usr/bin/covermyass
-  - chmod +x /usr/bin/covermyass
+  - sudo chmod +x /usr/bin/covermyass
 
 script:
   - sudo covermyass now
