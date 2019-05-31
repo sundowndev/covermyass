@@ -158,7 +158,7 @@ clear # Clear output
 if [ -n "$1" ] && [ "$1" == 'now' ]; then
         clearLogs
         clearHistory
-        exitTool
+        exit 0
 fi
 
 menu
