@@ -3,9 +3,10 @@
 [![Build status](https://img.shields.io/travis/sundowndev/covermyass/master.svg?style=flat-square)](https://travis-ci.org/sundowndev/covermyass/builds)
 [![Tag](https://img.shields.io/github/tag/SundownDEV/covermyass.svg?style=flat-square)](https://github.com/sundowndev/covermyass/releases)
 
-### This tool is unmaintained
 
-I'm building a better designed alternative at [sundowndev/go-covermyass](https://github.com/sundowndev/go-covermyass).
+### :warning: Deprecation notice
+
+**v1 is deprecated and not maintained anymore, please [use v2 instead](v2)**.
 
 ### About
 
