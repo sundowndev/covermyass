@@ -1,6 +1,8 @@
 package services
 
-import "os"
+import (
+	"github.com/sundowndev/covermyass/v2/lib/find"
+)
 
 const (
 	Linux   = "linux"
@@ -12,8 +14,8 @@ var services []Service
 
 type Service interface {
 	Name() string
-	Paths() map[string][]string
-	HandleFile(string, os.FileInfo) error
+	Paths() []string
+	HandleFile(find.FileInfo) error
 }
 
 func Services() []Service {

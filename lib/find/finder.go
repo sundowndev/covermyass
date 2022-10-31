@@ -1,6 +1,7 @@
 package find
 
 import (
+	"context"
 	"fmt"
 	"github.com/bmatcuk/doublestar/v4"
 	"github.com/sirupsen/logrus"
@@ -12,7 +13,7 @@ import (
 )
 
 type Finder interface {
-	Run() error
+	Run(context.Context) error
 	Results() []FileInfo
 }
 
@@ -32,14 +33,18 @@ func New(fsys fs.FS, filterEngine filter.Filter, paths []string) Finder {
 	}
 }
 
-func (f *finder) Run() error {
+func (f *finder) Run(ctx context.Context) error {
 	// Voluntary reset the results slice
 	f.results = make([]FileInfo, 0)
 
 	for _, pattern := range f.paths {
 		if len(pattern) == 0 {
-			logrus.Warn("pattern skipped because it has lengh of 0")
+			logrus.Warn("pattern skipped because it has length of 0")
 			continue
+		}
+
+		if !doublestar.ValidatePathPattern(pattern) {
+			return fmt.Errorf("pattern %s is not valid", pattern)
 		}
 
 		var formattedPattern string
@@ -53,7 +58,10 @@ func (f *finder) Run() error {
 			if err != nil {
 				return err
 			}
-			f.results = append(f.results, &fileInfo{info, fmt.Sprintf("%s%s", string(os.PathSeparator), filepath.FromSlash(path))})
+			f.results = append(f.results, &fileInfo{
+				FileInfo: info,
+				path:     fmt.Sprintf("%s%s", string(os.PathSeparator), filepath.FromSlash(path)),
+			})
 			return nil
 		})
 		if err != nil {

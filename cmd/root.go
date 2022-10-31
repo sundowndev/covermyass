@@ -6,17 +6,14 @@ import (
 	"github.com/sundowndev/covermyass/v2/build"
 	"github.com/sundowndev/covermyass/v2/lib/analysis"
 	"github.com/sundowndev/covermyass/v2/lib/filter"
-	"github.com/sundowndev/covermyass/v2/lib/find"
 	"github.com/sundowndev/covermyass/v2/lib/output"
-	"github.com/sundowndev/covermyass/v2/lib/services"
-	"log"
 	"os"
-	"runtime"
 )
 
 type RootCmdOptions struct {
-	List  bool
-	Write bool
+	List            bool
+	Write           bool
+	ExcludeReadOnly bool
 	//ExtraPaths []string
 	//FilterRules []string
 }
@@ -37,37 +34,18 @@ func NewRootCmd() *cobra.Command {
 				output.ChangePrinter(output.NewConsolePrinter())
 			}
 
-			a := analysis.New()
-
-			output.Printf("Loading known log files for %s\n", runtime.GOOS)
-			services.Init()
-			for _, service := range services.Services() {
-				patterns, ok := service.Paths()[runtime.GOOS]
-				if !ok {
-					continue
-				}
-				a.AddPatterns(patterns...)
-			}
-
 			filterEngine := filter.NewEngine()
-			finder := find.New(os.DirFS(""), filterEngine, a.Patterns())
-
-			output.Printf("Searching for log files...\n\n")
-			err := finder.Run()
+			analyzer := analysis.NewAnalyzer(filterEngine)
+			a, err := analyzer.Analyze()
 			if err != nil {
-				log.Fatal(err)
-			}
-
-			for _, info := range finder.Results() {
-				a.AddResult(analysis.Result{
-					Path: info.Path(),
-					Size: info.Size(),
-					Mode: info.Mode(),
-				})
+				return err
 			}
 
 			if opts.List {
 				for _, result := range a.Results() {
+					if opts.ExcludeReadOnly && result.ReadOnly {
+						continue
+					}
 					fmt.Println(result.Path)
 				}
 				return nil
@@ -81,6 +59,7 @@ func NewRootCmd() *cobra.Command {
 
 	cmd.PersistentFlags().BoolVarP(&opts.List, "list", "l", false, "Show files in a simple list format. This will prevent any write operation.")
 	cmd.PersistentFlags().BoolVar(&opts.Write, "write", false, "Erase found log files. This WILL truncate the files!")
+	cmd.PersistentFlags().BoolVar(&opts.ExcludeReadOnly, "no-read-only", false, "Exclude read-only files in the list. Must be used with --list.")
 
 	return cmd
 }
