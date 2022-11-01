@@ -23,7 +23,7 @@ func NewRootCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "covermyass",
 		Short: "Post-exploitation tool for covering tracks on Linux, Darwin and Windows.",
-		Long:  "Covermyass is a post-exploitation tool for pen-testers that finds then erases log files on the current machine. The tool scans the filesystem and look for known log files that can be erased. Running this tool with root privileges is safe and even recommended to avoid access permission errors. This tool does not perform any network call.",
+		Long:  "Covermyass is a post-exploitation tool for pen-testers that finds then erases log files on the current machine. The tool scans the filesystem and look for known log files that can be erased. Files are overwritten multiple times with random data, in order to make it harder for even very expensive hardware probing to recover the data. Running this tool with root privileges is safe and even recommended to avoid access permission errors. This tool does not perform any network call.",
 		Example: "covermyass --write -p /db/*.log\n" +
 			"covermyass --list -p /db/**/*.log",
 		Version: build.String(),
