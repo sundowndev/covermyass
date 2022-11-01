@@ -14,7 +14,6 @@ type FileInfo interface {
 type fileInfo struct {
 	fs.FileInfo
 	path string
-	ro   bool
 }
 
 func (f *fileInfo) Path() string {
@@ -22,9 +21,6 @@ func (f *fileInfo) Path() string {
 }
 
 func (f *fileInfo) ReadOnly() bool {
-	_, err := os.OpenFile(f.path, os.O_CREATE|os.O_RDWR|os.O_APPEND, 0666)
-	if err != nil {
-		f.ro = true
-	}
-	return f.ro
+	_, err := os.OpenFile(f.path, os.O_RDWR, 0666)
+	return err != nil
 }

@@ -12,8 +12,11 @@ import (
 
 type RootCmdOptions struct {
 	List            bool
-	Write           bool
 	ExcludeReadOnly bool
+	Write           bool
+	Zero            bool
+	Iterations      int
+	Unlink          bool
 	//ExtraPaths []string
 	//FilterRules []string
 }
@@ -25,7 +28,7 @@ func NewRootCmd() *cobra.Command {
 		Short: "Post-exploitation tool for covering tracks on Linux, Darwin and Windows.",
 		Long:  "Covermyass is a post-exploitation tool for pen-testers that finds then erases log files on the current machine. The tool scans the filesystem and look for known log files that can be erased. Files are overwritten multiple times with random data, in order to make it harder for even very expensive hardware probing to recover the data. Running this tool with root privileges is safe and even recommended to avoid access permission errors. This tool does not perform any network call.",
 		Example: "covermyass --write -p /db/*.log\n" +
-			"covermyass --list -p /db/**/*.log",
+			"covermyass --write -z -n 5",
 		Version: build.String(),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.List {
@@ -57,9 +60,12 @@ func NewRootCmd() *cobra.Command {
 		},
 	}
 
-	cmd.PersistentFlags().BoolVarP(&opts.List, "list", "l", false, "Show files in a simple list format. This will prevent any write operation.")
-	cmd.PersistentFlags().BoolVar(&opts.Write, "write", false, "Erase found log files. This WILL truncate the files!")
-	cmd.PersistentFlags().BoolVar(&opts.ExcludeReadOnly, "no-read-only", false, "Exclude read-only files in the list. Must be used with --list.")
+	cmd.PersistentFlags().BoolVarP(&opts.List, "list", "l", false, "Show files in a simple list format. This will prevent any write operation")
+	cmd.PersistentFlags().BoolVar(&opts.Write, "write", false, "Erase found log files. This WILL shred the files!")
+	cmd.PersistentFlags().BoolVar(&opts.ExcludeReadOnly, "no-read-only", false, "Exclude read-only files in the list. Must be used with --list")
+	cmd.PersistentFlags().BoolVarP(&opts.Zero, "zero", "z", false, "Add a final overwrite with zeros to hide shredding")
+	cmd.PersistentFlags().IntVarP(&opts.Iterations, "iterations", "n", 3, "Overwrite N times instead of the default")
+	cmd.PersistentFlags().BoolVarP(&opts.Unlink, "unlink", "u", false, "Deallocate and remove file after overwriting")
 
 	return cmd
 }
