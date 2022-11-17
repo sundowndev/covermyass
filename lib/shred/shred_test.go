@@ -21,9 +21,9 @@ func TestShredder_Write(t *testing.T) {
 			wantError: errors.New("shredding failed: stat testdata/fake.log: no such file or directory"),
 		},
 		{
-			name:      "test with protected file",
-			input:     "testdata/protected.log",
-			wantError: errors.New("shredding failed: open testdata/protected.log: permission denied"),
+			name:      "test with non-file path",
+			input:     "testdata/",
+			wantError: errors.New("shredding failed: open testdata/: is a directory"),
 		},
 	}
 

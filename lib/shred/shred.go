@@ -47,7 +47,7 @@ func (s *Shredder) Write(pathName string) error {
 	}
 
 	// Open the file
-	file, err := os.OpenFile(pathName, os.O_WRONLY, 0777)
+	file, err := os.OpenFile(pathName, os.O_WRONLY, fstat.Mode())
 	if err != nil {
 		return fmt.Errorf("shredding failed: %w", err)
 	}
