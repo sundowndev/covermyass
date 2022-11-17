@@ -2,11 +2,13 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/sundowndev/covermyass/v2/build"
 	"github.com/sundowndev/covermyass/v2/lib/analysis"
 	"github.com/sundowndev/covermyass/v2/lib/filter"
 	"github.com/sundowndev/covermyass/v2/lib/output"
+	"github.com/sundowndev/covermyass/v2/lib/shred"
 	"os"
 )
 
@@ -60,6 +62,24 @@ covermyass --write -z -n 5
 			}
 
 			a.Write(os.Stdout)
+
+			if opts.Write {
+				shredOptions := &shred.ShredderOptions{
+					Zero:       opts.Zero,
+					Iterations: opts.Iterations,
+					Unlink:     opts.Unlink,
+				}
+				s := shred.New(shredOptions)
+				for _, result := range a.Results() {
+					logrus.
+						WithField("path", result.Path).
+						Debug("Shredding file")
+					if err := s.Write(result.Path); err != nil {
+						return fmt.Errorf("error writing file %s: %e", result.Path, err)
+					}
+				}
+				fmt.Printf("\nShredded %d files %d times\n", len(a.Results()), opts.Iterations)
+			}
 
 			return nil
 		},

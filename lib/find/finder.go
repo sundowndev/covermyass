@@ -13,38 +13,32 @@ import (
 )
 
 type Finder interface {
-	Run(context.Context) error
-	Results() []FileInfo
+	Run(context.Context, []string) ([]FileInfo, error)
 }
 
 type finder struct {
-	fs      fs.FS
-	filter  filter.Filter
-	paths   []string
-	results []FileInfo
+	fs     fs.FS
+	filter filter.Filter
 }
 
-func New(fsys fs.FS, filterEngine filter.Filter, paths []string) Finder {
+func New(fsys fs.FS, filterEngine filter.Filter) Finder {
 	return &finder{
-		fs:      fsys,
-		filter:  filterEngine,
-		paths:   paths,
-		results: make([]FileInfo, 0),
+		fs:     fsys,
+		filter: filterEngine,
 	}
 }
 
-func (f *finder) Run(ctx context.Context) error {
-	// Voluntary reset the results slice
-	f.results = make([]FileInfo, 0)
+func (f *finder) Run(ctx context.Context, paths []string) ([]FileInfo, error) {
+	results := make([]FileInfo, 0)
 
-	for _, pattern := range f.paths {
+	for _, pattern := range paths {
 		if len(pattern) == 0 {
 			logrus.Warn("pattern skipped because it has length of 0")
 			continue
 		}
 
 		if !doublestar.ValidatePathPattern(pattern) {
-			return fmt.Errorf("pattern %s is not valid", pattern)
+			return results, fmt.Errorf("pattern %s is not valid", pattern)
 		}
 
 		var formattedPattern string
@@ -58,7 +52,7 @@ func (f *finder) Run(ctx context.Context) error {
 			if err != nil {
 				return err
 			}
-			f.results = append(f.results, &fileInfo{
+			results = append(results, &fileInfo{
 				FileInfo: info,
 				path:     fmt.Sprintf("%s%s", string(os.PathSeparator), filepath.FromSlash(path)),
 			})
@@ -68,19 +62,17 @@ func (f *finder) Run(ctx context.Context) error {
 			logrus.WithField("pattern", filepath.ToSlash(formattedPattern)).Error(err)
 		}
 	}
-	return nil
+	return f.removeDuplicates(results), nil
 }
 
-func (f *finder) Results() []FileInfo {
-	// Remove duplicates
+func (f *finder) removeDuplicates(results []FileInfo) []FileInfo {
 	resultsMap := make(map[string]FileInfo, 0)
-	for _, res := range f.results {
+	for _, res := range results {
 		resultsMap[res.Path()] = res
 	}
 	resultsSlice := make([]FileInfo, 0)
 	for _, file := range resultsMap {
 		resultsSlice = append(resultsSlice, file)
 	}
-
 	return resultsSlice
 }

@@ -31,15 +31,16 @@ func (a *Analyzer) Analyze() (*Analysis, error) {
 	for _, c := range check.GetAllChecks() {
 		wg.Add(1)
 		go func(c check.Check) {
-			finder := find.New(os.DirFS(""), a.filter, c.Paths())
-			if err := finder.Run(context.TODO()); err != nil {
+			finder := find.New(os.DirFS(""), a.filter)
+			results, err := finder.Run(context.TODO(), c.Paths())
+			if err != nil {
 				logrus.Error(err)
 				return
 			}
 
 			m.Lock()
 			defer m.Unlock()
-			for _, info := range finder.Results() {
+			for _, info := range results {
 				analysis.AddResult(Result{
 					Check:    c,
 					Path:     info.Path(),
