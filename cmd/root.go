@@ -20,7 +20,7 @@ type RootCmdOptions struct {
 	Iterations      int
 	Unlink          bool
 	//ExtraPaths []string
-	//FilterRules []string
+	FilterRules []string
 }
 
 func NewRootCmd() *cobra.Command {
@@ -45,6 +45,11 @@ covermyass --write -z -n 5
 			}
 
 			filterEngine := filter.NewEngine()
+			err := filterEngine.AddRule(opts.FilterRules...)
+			if err != nil {
+				return err
+			}
+
 			analyzer := analysis.NewAnalyzer(filterEngine)
 			a, err := analyzer.Analyze()
 			if err != nil {
@@ -75,10 +80,10 @@ covermyass --write -z -n 5
 						WithField("path", result.Path).
 						Debug("Shredding file")
 					if err := s.Write(result.Path); err != nil {
-						return fmt.Errorf("error writing file %s: %e", result.Path, err)
+						return output.Errorf("error writing file %s: %e", result.Path, err)
 					}
 				}
-				fmt.Printf("\nShredded %d files %d times\n", len(a.Results()), opts.Iterations)
+				output.Printf("\nShredded %d files %d times\n", len(a.Results()), opts.Iterations)
 			}
 
 			return nil
@@ -91,6 +96,7 @@ covermyass --write -z -n 5
 	cmd.PersistentFlags().BoolVarP(&opts.Zero, "zero", "z", false, "Add a final overwrite with zeros to hide shredding")
 	cmd.PersistentFlags().IntVarP(&opts.Iterations, "iterations", "n", 3, "Overwrite N times instead of the default")
 	cmd.PersistentFlags().BoolVarP(&opts.Unlink, "unlink", "u", false, "Deallocate and remove file after overwriting")
+	cmd.PersistentFlags().StringSliceVarP(&opts.FilterRules, "filter", "f", []string{}, "File paths to ignore (supports glob patterns)")
 
 	return cmd
 }

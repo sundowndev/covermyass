@@ -41,6 +41,11 @@ func (f *finder) Run(ctx context.Context, paths []string) ([]FileInfo, error) {
 			return results, fmt.Errorf("pattern %s is not valid", pattern)
 		}
 
+		if f.filter.Match(pattern) {
+			logrus.WithField("pattern", pattern).Debug("pattern ignored by filter")
+			continue
+		}
+
 		var formattedPattern string
 		if strings.Split(pattern, "")[0] == string(os.PathSeparator) {
 			formattedPattern = strings.Join(strings.Split(pattern, "")[1:], "")

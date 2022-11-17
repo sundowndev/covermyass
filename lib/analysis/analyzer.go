@@ -41,6 +41,10 @@ func (a *Analyzer) Analyze() (*Analysis, error) {
 			m.Lock()
 			defer m.Unlock()
 			for _, info := range results {
+				if a.filter.Match(info.Path()) {
+					continue
+				}
+
 				analysis.AddResult(Result{
 					Check:    c,
 					Path:     info.Path(),
