@@ -3,7 +3,6 @@ package check
 import (
 	"fmt"
 	"github.com/sirupsen/logrus"
-	"github.com/sundowndev/covermyass/v2/lib/find"
 	"os"
 )
 
@@ -29,10 +28,6 @@ func (s *shellHistoryCheck) Paths() []string {
 		fmt.Sprintf("%s/.node_repl_history", homeDir),
 		fmt.Sprintf("%s/.python_history", homeDir),
 	}
-}
-
-func (s *shellHistoryCheck) HandleFile(file find.FileInfo) error {
-	return os.Truncate(file.Path(), 0)
 }
 
 func init() {

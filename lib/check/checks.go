@@ -1,9 +1,5 @@
 package check
 
-import (
-	"github.com/sundowndev/covermyass/v2/lib/find"
-)
-
 const (
 	Linux   = "linux"
 	Darwin  = "darwin"
@@ -15,7 +11,6 @@ var checks []Check
 type Check interface {
 	Name() string
 	Paths() []string
-	HandleFile(find.FileInfo) error
 }
 
 func GetAllChecks() []Check {
