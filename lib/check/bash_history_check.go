@@ -34,3 +34,7 @@ func (s *shellHistoryCheck) Paths() []string {
 func (s *shellHistoryCheck) HandleFile(file find.FileInfo) error {
 	return os.Truncate(file.Path(), 0)
 }
+
+func init() {
+	AddCheck(NewShellHistoryCheck())
+}

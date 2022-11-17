@@ -26,3 +26,7 @@ func (s *sshdCheck) Paths() []string {
 func (s *sshdCheck) HandleFile(file find.FileInfo) error {
 	return os.Truncate(file.Path(), 0)
 }
+
+func init() {
+	AddCheck(NewSSHdCheck())
+}

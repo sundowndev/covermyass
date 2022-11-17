@@ -23,8 +23,7 @@ func NewAnalyzer(filterEngine filter.Filter) *Analyzer {
 func (a *Analyzer) Analyze() (*Analysis, error) {
 	analysis := NewAnalysis()
 
-	output.Printf("Loading known log files for %s\n", runtime.GOOS)
-	check.Init()
+	output.Printf("Loaded known log files for %s\n", runtime.GOOS)
 	output.Printf("Scanning file system...\n\n")
 
 	wg := &sync.WaitGroup{}

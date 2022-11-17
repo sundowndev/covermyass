@@ -26,3 +26,7 @@ func (s *lastLogCheck) Paths() []string {
 func (s *lastLogCheck) HandleFile(file find.FileInfo) error {
 	return os.Truncate(file.Path(), 0)
 }
+
+func init() {
+	AddCheck(NewLastLogCheck())
+}

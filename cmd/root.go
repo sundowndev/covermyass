@@ -27,8 +27,13 @@ func NewRootCmd() *cobra.Command {
 		Use:   "covermyass",
 		Short: "Post-exploitation tool for covering tracks on Linux, Darwin and Windows.",
 		Long:  "Covermyass is a post-exploitation tool for pen-testers that finds then erases log files on the current machine. The tool scans the filesystem and look for known log files that can be erased. Files are overwritten multiple times with random data, in order to make it harder for even very expensive hardware probing to recover the data. Running this tool with root privileges is safe and even recommended to avoid access permission errors. This tool does not perform any network call.",
-		Example: "covermyass --write -p /db/*.log\n" +
-			"covermyass --write -z -n 5",
+		Example: `
+Overwrite log files as well as those found by path /db/*.log
+covermyass --write -p /db/*.log
+
+Overwrite log files 5 times with a final overwrite with zeros to hide shredding
+covermyass --write -z -n 5
+`,
 		Version: build.String(),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.List {
