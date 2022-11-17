@@ -3,10 +3,10 @@ package analysis
 import (
 	"context"
 	"github.com/sirupsen/logrus"
+	"github.com/sundowndev/covermyass/v2/lib/check"
 	"github.com/sundowndev/covermyass/v2/lib/filter"
 	"github.com/sundowndev/covermyass/v2/lib/find"
 	"github.com/sundowndev/covermyass/v2/lib/output"
-	"github.com/sundowndev/covermyass/v2/lib/services"
 	"os"
 	"runtime"
 	"sync"
@@ -24,15 +24,15 @@ func (a *Analyzer) Analyze() (*Analysis, error) {
 	analysis := NewAnalysis()
 
 	output.Printf("Loading known log files for %s\n", runtime.GOOS)
-	services.Init()
+	check.Init()
 	output.Printf("Scanning file system...\n\n")
 
 	wg := &sync.WaitGroup{}
 	m := &sync.Mutex{}
-	for _, service := range services.Services() {
+	for _, c := range check.GetAllChecks() {
 		wg.Add(1)
-		go func(svc services.Service) {
-			finder := find.New(os.DirFS(""), a.filter, svc.Paths())
+		go func(c check.Check) {
+			finder := find.New(os.DirFS(""), a.filter, c.Paths())
 			if err := finder.Run(context.TODO()); err != nil {
 				logrus.Error(err)
 				return
@@ -42,7 +42,7 @@ func (a *Analyzer) Analyze() (*Analysis, error) {
 			defer m.Unlock()
 			for _, info := range finder.Results() {
 				analysis.AddResult(Result{
-					Service:  svc.Name(),
+					Check:    c,
 					Path:     info.Path(),
 					Size:     info.Size(),
 					Mode:     info.Mode(),
@@ -51,7 +51,7 @@ func (a *Analyzer) Analyze() (*Analysis, error) {
 			}
 
 			wg.Done()
-		}(service)
+		}(c)
 	}
 
 	wg.Wait()

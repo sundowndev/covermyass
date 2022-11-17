@@ -1,4 +1,4 @@
-package services
+package check
 
 import (
 	"github.com/sundowndev/covermyass/v2/lib/find"
@@ -10,18 +10,18 @@ const (
 	Windows = "windows"
 )
 
-var services []Service
+var checks []Check
 
-type Service interface {
+type Check interface {
 	Name() string
 	Paths() []string
 	HandleFile(find.FileInfo) error
 }
 
-func Services() []Service {
-	return services
+func GetAllChecks() []Check {
+	return checks
 }
 
-func AddService(s Service) {
-	services = append(services, s)
+func AddCheck(s Check) {
+	checks = append(checks, s)
 }

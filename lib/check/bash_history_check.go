@@ -1,4 +1,4 @@
-package services
+package check
 
 import (
 	"fmt"
@@ -7,17 +7,17 @@ import (
 	"os"
 )
 
-type ShellHistoryService struct{}
+type shellHistoryCheck struct{}
 
-func NewShellHistoryService() Service {
-	return &ShellHistoryService{}
+func NewShellHistoryCheck() Check {
+	return &shellHistoryCheck{}
 }
 
-func (s *ShellHistoryService) Name() string {
+func (s *shellHistoryCheck) Name() string {
 	return "shell_history"
 }
 
-func (s *ShellHistoryService) Paths() []string {
+func (s *shellHistoryCheck) Paths() []string {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		logrus.Error(err)
@@ -31,6 +31,6 @@ func (s *ShellHistoryService) Paths() []string {
 	}
 }
 
-func (s *ShellHistoryService) HandleFile(file find.FileInfo) error {
+func (s *shellHistoryCheck) HandleFile(file find.FileInfo) error {
 	return os.Truncate(file.Path(), 0)
 }

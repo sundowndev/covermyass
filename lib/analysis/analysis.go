@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"fmt"
+	"github.com/sundowndev/covermyass/v2/lib/check"
 	"io"
 	"os"
 	"time"
@@ -13,7 +14,7 @@ type Summary struct {
 }
 
 type Result struct {
-	Service  string
+	Check    check.Check
 	Path     string
 	Size     int64
 	Mode     os.FileMode
