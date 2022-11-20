@@ -43,25 +43,31 @@ func (s *Shredder) Write(pathName string) error {
 	// Stat the file for the file length
 	fstat, err := os.Stat(pathName)
 	if err != nil {
-		return fmt.Errorf("shredding failed: %w", err)
+		return fmt.Errorf("file stat failed: %w", err)
 	}
 
 	// Open the file
 	file, err := os.OpenFile(pathName, os.O_WRONLY, fstat.Mode())
 	if err != nil {
-		return fmt.Errorf("shredding failed: %w", err)
+		return fmt.Errorf("file opening failed: %w", err)
 	}
+	defer file.Close()
 
 	err = s.shred(fstat, file)
 	if err != nil {
 		return fmt.Errorf("shredding failed: %w", err)
 	}
 
+	if s.options.Zero {
+		if err := os.Truncate(pathName, 0); err != nil {
+			return fmt.Errorf("truncate failed: %w", err)
+		}
+	}
+
 	return nil
 }
 
 func (s *Shredder) shred(fstat FileInfo, file File) error {
-	defer file.Close()
 	fSize := fstat.Size()
 
 	// Avoid shredding if the file is already empty
@@ -97,13 +103,6 @@ func (s *Shredder) shred(fstat FileInfo, file File) error {
 			return err
 		}
 		err = file.Sync()
-		if err != nil {
-			return err
-		}
-	}
-
-	if s.options.Zero {
-		_, err := file.Write([]byte{})
 		if err != nil {
 			return err
 		}
