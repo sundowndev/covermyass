@@ -24,7 +24,7 @@ builds:
       - arm
       - arm64
       - 386
-    ldflags: "-s -w -X github.com/sundowndev/covermyass/build.version={{.Version}} -X github.com/sundowndev/covermyass/pkg/version.commit={{.ShortCommit}}"
+    ldflags: "-s -w -X github.com/sundowndev/covermyass/v2/build.version={{.Version}} -X github.com/sundowndev/covermyass/v2/build.commit={{.ShortCommit}}"
 archives:
   - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}'
     format: binary
