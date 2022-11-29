@@ -1,11 +1,5 @@
 package check
 
-const (
-	Linux   = "linux"
-	Darwin  = "darwin"
-	Windows = "windows"
-)
-
 var checks []Check
 
 type Check interface {
