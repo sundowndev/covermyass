@@ -28,7 +28,6 @@ type File interface {
 type ShredderOptions struct {
 	Zero       bool
 	Iterations int
-	Unlink     bool
 }
 
 type Shredder struct {

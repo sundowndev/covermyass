@@ -53,7 +53,6 @@ func TestShredder_shred(t *testing.T) {
 			options: ShredderOptions{
 				Zero:       false,
 				Iterations: 3,
-				Unlink:     false,
 			},
 			mocks: func(fakeFileInfo *mocks.FileInfo, fakeFile *mocks.File) {
 				fakeFileInfo.On("Size").Return(int64(0)).Times(1)
@@ -64,7 +63,6 @@ func TestShredder_shred(t *testing.T) {
 			options: ShredderOptions{
 				Zero:       false,
 				Iterations: 3,
-				Unlink:     false,
 			},
 			mocks: func(fakeFileInfo *mocks.FileInfo, fakeFile *mocks.File) {
 				fakeFileInfo.On("Size").Return(int64(64)).Times(4)
@@ -81,7 +79,6 @@ func TestShredder_shred(t *testing.T) {
 			options: ShredderOptions{
 				Zero:       false,
 				Iterations: 10,
-				Unlink:     false,
 			},
 			mocks: func(fakeFileInfo *mocks.FileInfo, fakeFile *mocks.File) {
 				fakeFileInfo.On("Size").Return(int64(2000000)).Times(11)
@@ -98,7 +95,6 @@ func TestShredder_shred(t *testing.T) {
 			options: ShredderOptions{
 				Zero:       false,
 				Iterations: 3,
-				Unlink:     false,
 			},
 			mocks: func(fakeFileInfo *mocks.FileInfo, fakeFile *mocks.File) {
 				fakeFileInfo.On("Size").Return(int64(2000)).Times(2)

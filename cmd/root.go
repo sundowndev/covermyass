@@ -18,7 +18,6 @@ type RootCmdOptions struct {
 	Write           bool
 	Zero            bool
 	Iterations      int
-	Unlink          bool
 	//ExtraPaths []string
 	FilterRules []string
 }
@@ -72,7 +71,6 @@ covermyass --write -z -n 5
 				shredOptions := &shred.ShredderOptions{
 					Zero:       opts.Zero,
 					Iterations: opts.Iterations,
-					Unlink:     opts.Unlink,
 				}
 				s := shred.New(shredOptions)
 				for _, result := range a.Results() {
@@ -95,7 +93,6 @@ covermyass --write -z -n 5
 	cmd.PersistentFlags().BoolVar(&opts.ExcludeReadOnly, "no-read-only", false, "Exclude read-only files in the list. Must be used with --list")
 	cmd.PersistentFlags().BoolVarP(&opts.Zero, "zero", "z", false, "Add a final overwrite with zeros to hide shredding")
 	cmd.PersistentFlags().IntVarP(&opts.Iterations, "iterations", "n", 3, "Overwrite N times instead of the default")
-	cmd.PersistentFlags().BoolVarP(&opts.Unlink, "unlink", "u", false, "Deallocate and remove file after overwriting")
 	cmd.PersistentFlags().StringSliceVarP(&opts.FilterRules, "filter", "f", []string{}, "File paths to ignore (supports glob patterns)")
 
 	return cmd
