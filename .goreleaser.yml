@@ -1,0 +1,37 @@
+project_name: covermyass
+dist: bin
+release:
+  github:
+    owner: sundowndev
+    name: covermyass
+  draft: false
+  prerelease: auto
+before:
+  hooks:
+    - go generate ./...
+builds:
+  - id: "covermyass"
+    binary: covermyass
+    dir: .
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      #- windows
+    goarch:
+      - amd64
+      - arm
+      - arm64
+      - 386
+    ldflags: "-s -w -X github.com/sundowndev/covermyass/v2/build.version={{.Version}} -X github.com/sundowndev/covermyass/v2/build.commit={{.ShortCommit}}"
+archives:
+  - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}'
+    format: binary
+    replacements:
+      armv6: arm
+checksum:
+  name_template: '{{ .ProjectName }}_SHA256SUMS'
+  algorithm: sha256
+snapshot:
+  name_template: "{{ .Tag }}-next"

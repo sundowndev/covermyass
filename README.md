@@ -1,97 +1,73 @@
-# Covermyass
+## *covermyass* ##
 
-[![Build status](https://img.shields.io/travis/sundowndev/covermyass/master.svg?style=flat-square)](https://travis-ci.org/sundowndev/covermyass/builds)
-[![Tag](https://img.shields.io/github/tag/SundownDEV/covermyass.svg?style=flat-square)](https://github.com/sundowndev/covermyass/releases)
+[![Build status](https://github.com/sundowndev/covermyass/workflows/Go%20build/badge.svg)](https://github.com/sundowndev/covermyass/actions)
+[![Tag](https://img.shields.io/github/tag/SundownDEV/covermyass.svg)](https://github.com/sundowndev/covermyass/releases)
 
-**⚠️ This tool is unmaintained**
+### About ###
 
-### About
+**Covermyass** is a post-exploitation tool to cover your tracks on various operating systems (Linux, Darwin, Windows, ...). It was designed for penetration testing "covering tracks" phase, before exiting the infected server. At any time, you can run the tool to find which log files exists on the system, then run again later to erase those files. The tool will tell you which file can be erased with the current user permissions. Files are overwritten repeatedly with random data, in order to make it harder for even very expensive hardware probing to recover the data.
 
-Shell script to cover your tracks on UNIX systems. Designed for pen testing "covering tracks" phase, before exiting the infected server. Or, permanently disable system logs for post-exploitation.
+### Current status ###
 
-This tool allows you to clear log files such as :
+This tool is still in beta. Upcoming versions might bring breaking changes. For now, we're focusing Linux and Darwin support, Windows may come later.
 
-```bash
-# Linux
-/var/log/messages # General message and system related stuff
-/var/log/auth.log # Authenication logs
-/var/log/kern.log # Kernel logs
-/var/log/cron.log # Crond logs
-/var/log/maillog # Mail server logs
-/var/log/boot.log # System boot log
-/var/log/mysqld.log # MySQL database server log file
-/var/log/qmail # Qmail log directory
-/var/log/httpd # Apache access and error logs directory
-/var/log/lighttpd # Lighttpd access and error logs directory
-/var/log/secure # Authentication log
-/var/log/utmp # Login records file
-/var/log/wtmp # Login records file
-/var/log/yum.log # Yum command log file
+### Installation ###
 
-# macOS
-/var/log/system.log # System Log
-/var/log/DiagnosticMessages # Mac Analytics Data
-/Library/Logs # System Application Logs
-/Library/Logs/DiagnosticReports # System Reports
-~/Library/Logs # User Application Logs
-~/Library/Logs/DiagnosticReports # User Reports
-```
-
-## Installation
-
-With sudo
+Download the latest release : 
 
 ```bash
-sudo curl -sSL https://raw.githubusercontent.com/sundowndev/covermyass/master/covermyass -o /usr/bin/covermyass
-sudo chmod +x /usr/bin/covermyass
+curl -sSL https://github.com/sundowndev/covermyass/releases/latest/download/covermyass_linux_amd64 -o ./covermyass
+chmod +x ./covermyass
 ```
 
-Without sudo :
-
-```bash
-curl -sSL https://raw.githubusercontent.com/sundowndev/covermyass/master/covermyass -o ~/.local/bin/covermyass
-chmod +x ~/.local/bin/covermyass
-```
-
-You can now use the tool using the executable.
-
-Keep in mind that without sudo privileges, you *might* be unable to clear system-level log files (`/var/log`).
-
-## Usage
-
-Simply type :
+### Usage ###
 
 ```
-covermyass # you may need to use sudo if you want to clean auth logs
+$ covermyass -h
+
+Usage:
+  covermyass [flags]
+
+Examples:
+
+Overwrite log files as well as those found by path /db/*.log
+covermyass --write -p /db/*.log
+
+Overwrite log files 5 times with a final overwrite with zeros to hide shredding
+covermyass --write -z -n 5
+
+
+Flags:
+  -f, --filter strings   File paths to ignore (supports glob patterns)
+  -h, --help             help for covermyass
+  -n, --iterations int   Overwrite N times instead of the default (default 3)
+  -l, --list             Show files in a simple list format. This will prevent any write operation
+      --no-read-only     Exclude read-only files in the list. Must be used with --list
+  -v, --version          version for covermyass
+      --write            Erase found log files. This WILL shred the files!
+  -z, --zero             Add a final overwrite with zeros to hide shredding
+
 ```
 
-Follow the instructions :
+First, run an analysis. This will not erase anything.
 
 ```
-Welcome to Cover my ass tool !
-
-Select an option :
-
-1) Clear logs for user root
-2) Permenently disable auth & bash history
-3) Restore settings to default
-99) Exit tool
-
->
+covermyass
 ```
 
-*NOTE: don't forget to exit the terminal session since the bash history is cached.*
-
-Clear logs instantly (requires *sudo* to be efficient) :
+When you acknowledged the results, erase those files.
 
 ```
-sudo covermyass now
+covermyass --write
 ```
 
-### Using cron job
+Filter out some paths : 
 
-Clear bash history every day at 5am :
-
-```bash
-0 5 * * * covermyass now >/dev/null 2>&1
 ```
+covermyass -f '/foo/bar/*.log'
+covermyass -f '/foo/bar.log'
+```
+
+### License ###
+
+**covermyass** is licensed under the MIT license. Refer to [LICENSE](LICENSE) for more information.
