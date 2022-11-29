@@ -78,7 +78,7 @@ covermyass --write -z -n 5
 						WithField("path", result.Path).
 						Debug("Shredding file")
 					if err := s.Write(result.Path); err != nil {
-						return output.Errorf("error writing file %s: %e", result.Path, err)
+						return fmt.Errorf("error writing file %s: %s", result.Path, err)
 					}
 				}
 				output.Printf("\nShredded %d files %d times\n", len(a.Results()), opts.Iterations)
