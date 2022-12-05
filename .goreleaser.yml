@@ -11,7 +11,7 @@ before:
     - go generate ./...
 signs:
   - artifacts: checksum
-    args: ["--batch", "-u", "{{ .Env.GPG_FINGERPRINT }}", "--output", "${signature}", "--detach-sign", "${artifact}", "--no-tty"]
+    args: ["--no-tty", "--batch", "-u", "{{ .Env.GPG_FINGERPRINT }}", "--output", "${signature}", "--detach-sign", "${artifact}"]
     signature: "${artifact}.gpg"
 builds:
   - id: "covermyass"
