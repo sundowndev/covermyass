@@ -30,7 +30,7 @@ test:
 
 .PHONY: coverage
 coverage: test
-	$(GOTOOL) cover -func=cover.out
+	$(GOTOOL) cover -func=c.out
 
 .PHONY: mocks
 mocks:

@@ -9,7 +9,11 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, windows-latest ]
     steps:
       - name: Set up Go
         uses: actions/setup-go@v3.2.0
@@ -24,6 +28,7 @@ jobs:
           go get -v -t -d ./...
 
       - name: Enforce Go formatted code
+        if: matrix.os == 'ubuntu-latest'
         run: |
           make fmt
           if [[ -z $(git status --porcelain) ]]; then
@@ -41,12 +46,19 @@ jobs:
         run: make build
 
       - name: Lint
+        if: matrix.os == 'ubuntu-latest'
         run: make lint
 
-      - name: Test
-        run: go test -race -coverprofile=./c.out -covermode=atomic -v ./...
+      - name: Test with coverage
+        if: matrix.os == 'ubuntu-latest'
+        run: make test
+
+      - name: Test without coverage
+        if: matrix.os != 'ubuntu-latest'
+        run: gotestsum --format testname -- -mod=readonly -race ./...
 
       - name: Report code coverage
+        if: matrix.os == 'ubuntu-latest'
         env:
           COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |

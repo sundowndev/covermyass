@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/bmatcuk/doublestar/v4"
 	"github.com/sirupsen/logrus"
+	"path/filepath"
 )
 
 type Filter interface {
@@ -33,7 +34,7 @@ func (e *Engine) Match(r string) bool {
 		if rule == r {
 			return true
 		}
-		ok, err := doublestar.PathMatch(rule, r)
+		ok, err := doublestar.Match(filepath.ToSlash(rule), filepath.ToSlash(r))
 		if err != nil {
 			logrus.WithField("rule", rule).WithField("target", r).Error(err)
 		}
