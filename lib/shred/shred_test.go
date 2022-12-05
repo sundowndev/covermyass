@@ -5,25 +5,32 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/sundowndev/covermyass/v2/mocks"
+	"runtime"
 	"testing"
 )
 
 func TestShredder_Write(t *testing.T) {
 	cases := []struct {
-		name      string
-		options   ShredderOptions
-		input     string
-		wantError error
+		name    string
+		options ShredderOptions
+		input   string
+		wantErr map[string]error
 	}{
 		{
-			name:      "test with non-existing file",
-			input:     "testdata/fake.log",
-			wantError: errors.New("file stat failed: stat testdata/fake.log: no such file or directory"),
+			name:  "test with non-existing file",
+			input: "testdata/fake.log",
+			wantErr: map[string]error{
+				"linux":   errors.New("file stat failed: stat testdata/fake.log: no such file or directory"),
+				"windows": errors.New("file stat failed: CreateFile testdata/fake.log: The system cannot find the file specified."),
+			},
 		},
 		{
-			name:      "test with non-file path",
-			input:     "testdata/",
-			wantError: errors.New("file opening failed: open testdata/: is a directory"),
+			name:  "test with non-file path",
+			input: "testdata/",
+			wantErr: map[string]error{
+				"linux":   errors.New("file opening failed: open testdata/: is a directory"),
+				"windows": errors.New("file opening failed: open testdata/: is a directory"),
+			},
 		},
 	}
 
@@ -32,10 +39,10 @@ func TestShredder_Write(t *testing.T) {
 			s := New(&tt.options)
 
 			err := s.Write(tt.input)
-			if tt.wantError == nil {
+			if tt.wantErr[runtime.GOOS] == nil {
 				assert.NoError(t, err)
 			} else {
-				assert.EqualError(t, err, tt.wantError.Error())
+				assert.EqualError(t, err, tt.wantErr[runtime.GOOS].Error())
 			}
 		})
 	}

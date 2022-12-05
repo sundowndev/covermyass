@@ -52,7 +52,7 @@ func TestFilter(t *testing.T) {
 			assert.NoError(t, err)
 
 			for path, shouldMatch := range tt.paths {
-				assert.Equal(t, shouldMatch, f.Match(path))
+				assert.Equal(t, shouldMatch, f.Match(path), "path: %s", path)
 			}
 		})
 	}
