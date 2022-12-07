@@ -71,3 +71,9 @@ covermyass -f '/foo/bar.log'
 ### License ###
 
 **covermyass** is licensed under the MIT license. Refer to [LICENSE](LICENSE) for more information.
+
+## Support
+
+<div align="center">
+  <img src="https://github.com/sundowndev/static/raw/main/sponsors.svg?v=c68eba9" width="100%" heigh="auto" />
+</div>
