@@ -1,11 +1,9 @@
-## *covermyass* ##
+# covermyass #
 
 [![Build status](https://github.com/sundowndev/covermyass/workflows/Go%20build/badge.svg)](https://github.com/sundowndev/covermyass/actions)
 [![Tag](https://img.shields.io/github/tag/SundownDEV/covermyass.svg)](https://github.com/sundowndev/covermyass/releases)
 
-### About ###
-
-**Covermyass** is a post-exploitation tool to cover your tracks on various operating systems (Linux, Darwin, Windows, ...). It was designed for penetration testing "covering tracks" phase, before exiting the infected server. At any time, you can run the tool to find which log files exists on the system, then run again later to erase those files. The tool will tell you which file can be erased with the current user permissions. Files are overwritten repeatedly with random data, in order to make it harder for even very expensive hardware probing to recover the data.
+Covermyass is a post-exploitation tool to cover your tracks on various operating systems (Linux, Darwin, Windows, ...). It was designed for penetration testing "covering tracks" phase, before exiting the infected server. At any time, you can run the tool to find which log files exists on the system, then run again later to erase those files. The tool will tell you which file can be erased with the current user permissions. Files are overwritten repeatedly with random data, in order to make it harder for even very expensive hardware probing to recover the data.
 
 ### Current status ###
 
@@ -17,7 +15,36 @@ Download the latest release :
 
 ```bash
 curl -sSL https://github.com/sundowndev/covermyass/releases/latest/download/covermyass_linux_amd64 -o ./covermyass
+```
+
+```bash
 chmod +x ./covermyass
+```
+
+### Verify digital signatures ###
+
+covermyass releases are signed using PGP key (rsa4096) with ID `E5BC23488DA8C7AC` and fingerprint `1A662C679AD91F549A77CD96E5BC23488DA8C7AC`. Our key can be retrieved from common keyservers.
+
+1. Download binary, checksums and signature
+```bash
+curl -L https://github.com/sundowndev/covermyass/releases/latest/download/covermyass_linux_amd64 -o covermyass_linux_amd64 && \
+curl -L https://github.com/sundowndev/covermyass/releases/latest/download/covermyass_SHA256SUMS -o covermyass_SHA256SUMS && \
+curl -L https://github.com/sundowndev/covermyass/releases/latest/download/covermyass_SHA256SUMS.gpg -o covermyass_SHA256SUMS.gpg
+```
+
+2. Import key
+```bash
+gpg --keyserver https://keys.openpgp.org --recv-keys 0xE5BC23488DA8C7AC
+```
+
+3. Verify signature (optionally trust the key from gnupg to avoid any warning)
+```bash
+gpg --verify covermyass_SHA256SUMS.gpg covermyass_SHA256SUMS
+```
+
+4. Verify checksum
+```bash
+sha256sum --ignore-missing -c covermyass_SHA256SUMS
 ```
 
 ### Usage ###
@@ -70,7 +97,7 @@ covermyass -f '/foo/bar.log'
 
 ### License ###
 
-**covermyass** is licensed under the MIT license. Refer to [LICENSE](LICENSE) for more information.
+Covermyass is licensed under the MIT license. Refer to [LICENSE](LICENSE) for more information.
 
 ## Support
 
