@@ -5,9 +5,31 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/sundowndev/covermyass/v2/mocks"
+	"os"
 	"runtime"
 	"testing"
 )
+
+func BenchmarkShredder_Write(b *testing.B) {
+	f, err := os.CreateTemp(b.TempDir(), b.Name())
+	if err != nil {
+		b.Fatal(err)
+	}
+	if _, err = f.WriteAt(make([]byte, 1024), 0); err != nil {
+		b.Fatal(err)
+	}
+
+	for i := 0; i < b.N; i++ {
+		opts := &ShredderOptions{
+			Zero:       false,
+			Iterations: 3,
+		}
+		err = New(opts).Write(f.Name())
+		if err != nil {
+			b.Fatal(err)
+		}
+	}
+}
 
 func TestShredder_Write(t *testing.T) {
 	cases := []struct {
@@ -72,13 +94,12 @@ func TestShredder_shred(t *testing.T) {
 				Iterations: 3,
 			},
 			mocks: func(fakeFileInfo *mocks.FileInfo, fakeFile *mocks.File) {
-				fakeFileInfo.On("Size").Return(int64(64)).Times(4)
+				fakeFileInfo.On("Size").Return(int64(64)).Times(2)
 
-				fakeFile.On("Seek", int64(0), 0).Return(int64(0), nil).Times(3)
 				fakeFile.On("Sync").Return(nil).Times(3)
-				fakeFile.On("Write", mock.MatchedBy(func(b []byte) bool {
-					return len(b) != 0
-				})).Return(0, nil)
+				fakeFile.On("WriteAt", mock.MatchedBy(func(b []byte) bool {
+					return len(b) == 64
+				}), int64(0)).Return(0, nil).Times(3)
 			},
 		},
 		{
@@ -88,13 +109,12 @@ func TestShredder_shred(t *testing.T) {
 				Iterations: 10,
 			},
 			mocks: func(fakeFileInfo *mocks.FileInfo, fakeFile *mocks.File) {
-				fakeFileInfo.On("Size").Return(int64(2000000)).Times(11)
+				fakeFileInfo.On("Size").Return(int64(2000000)).Times(2)
 
-				fakeFile.On("Seek", int64(0), 0).Return(int64(0), nil).Times(10)
 				fakeFile.On("Sync").Return(nil).Times(10)
-				fakeFile.On("Write", mock.MatchedBy(func(b []byte) bool {
-					return len(b) != 0
-				})).Return(0, nil)
+				fakeFile.On("WriteAt", mock.MatchedBy(func(b []byte) bool {
+					return len(b) == 2000000
+				}), int64(0)).Return(0, nil).Times(10)
 			},
 		},
 		{
@@ -106,10 +126,9 @@ func TestShredder_shred(t *testing.T) {
 			mocks: func(fakeFileInfo *mocks.FileInfo, fakeFile *mocks.File) {
 				fakeFileInfo.On("Size").Return(int64(2000)).Times(2)
 
-				fakeFile.On("Seek", int64(0), 0).Return(int64(0), nil).Times(1)
-				fakeFile.On("Write", mock.MatchedBy(func(b []byte) bool {
-					return len(b) != 0
-				})).Return(0, errors.New("dummy error"))
+				fakeFile.On("WriteAt", mock.MatchedBy(func(b []byte) bool {
+					return len(b) == 2000
+				}), int64(0)).Return(0, errors.New("dummy error")).Times(1)
 			},
 			wantError: errors.New("dummy error"),
 		},

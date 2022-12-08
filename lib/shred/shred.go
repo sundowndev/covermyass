@@ -22,6 +22,7 @@ type File interface {
 	Seek(int64, int) (int64, error)
 	Sync() error
 	Write([]byte) (int, error)
+	WriteAt([]byte, int64) (int, error)
 	Close() error
 }
 
@@ -74,30 +75,14 @@ func (s *Shredder) shred(fstat FileInfo, file File) error {
 		return nil
 	}
 
-	// Write random bytes over the file 3 times
-	junkBuf := make([]byte, 1024)
+	// Write random bytes over the file N times
+	junkBuf := make([]byte, fstat.Size())
 	for i := 0; i < s.options.Iterations; i++ {
-		_, err := file.Seek(0, 0)
+		_, err := rand.Read(junkBuf)
 		if err != nil {
 			return err
 		}
-		for fSize = fstat.Size(); fSize > 1024; fSize -= 1024 {
-			// Load a buffer with random data
-			_, err = rand.Read(junkBuf)
-			if err != nil {
-				return err
-			}
-			// Write random bytes to file
-			_, err = file.Write(junkBuf)
-			if err != nil {
-				return err
-			}
-		}
-		_, err = rand.Read(junkBuf[:fSize])
-		if err != nil {
-			return err
-		}
-		_, err = file.Write(junkBuf[:fSize])
+		_, err = file.WriteAt(junkBuf, 0)
 		if err != nil {
 			return err
 		}

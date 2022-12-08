@@ -79,6 +79,27 @@ func (_m *File) Write(_a0 []byte) (int, error) {
 	return r0, r1
 }
 
+// WriteAt provides a mock function with given fields: _a0, _a1
+func (_m *File) WriteAt(_a0 []byte, _a1 int64) (int, error) {
+	ret := _m.Called(_a0, _a1)
+
+	var r0 int
+	if rf, ok := ret.Get(0).(func([]byte, int64) int); ok {
+		r0 = rf(_a0, _a1)
+	} else {
+		r0 = ret.Get(0).(int)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func([]byte, int64) error); ok {
+		r1 = rf(_a0, _a1)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 type mockConstructorTestingTNewFile interface {
 	mock.TestingT
 	Cleanup(func())
