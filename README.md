@@ -1,7 +1,7 @@
 # covermyass #
 
 [![build status](https://github.com/sundowndev/covermyass/workflows/Go%20build/badge.svg)](https://github.com/sundowndev/covermyass/actions)
-[![latest tag](https://img.shields.io/github/tag/SundownDEV/covermyass.svg)](https://github.com/sundowndev/covermyass/releases)
+[![latest release](https://img.shields.io/github/v/release/sundowndev/covermyass)](https://github.com/sundowndev/covermyass/releases)
 [![Coverage Status](https://coveralls.io/repos/github/sundowndev/covermyass/badge.svg?branch=master)](https://coveralls.io/github/sundowndev/covermyass?branch=master)
 
 Covermyass is a post-exploitation tool to cover your tracks on various operating systems (Linux, Darwin, Windows, ...). It was designed for penetration testing "covering tracks" phase, before exiting the compromised server. At any time, you can run the tool to find which log files exists on the system, then run again later to erase those files. The tool will tell you which file can be erased with the current user permissions. Files are overwritten repeatedly with random data, in order to make it harder for even very expensive hardware probing to recover the data.
