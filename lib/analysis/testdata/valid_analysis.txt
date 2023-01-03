@@ -1,0 +1,6 @@
+Found the following files
+/var/log/dummy.log (32 B, -rwxrwxrwx)
+/var/log/dummy2.log (8 B, ---x-wx---)
+
+Summary
+Found 2 files (1 read-write, 1 read-only) in 0s

@@ -14,10 +14,14 @@ import (
 
 type Analyzer struct {
 	filter filter.Filter
+	finder find.Finder
 }
 
 func NewAnalyzer(filterEngine filter.Filter) *Analyzer {
-	return &Analyzer{filterEngine}
+	return &Analyzer{
+		filterEngine,
+		find.New(os.DirFS(""), filterEngine),
+	}
 }
 
 func (a *Analyzer) Analyze() (*Analysis, error) {
@@ -31,8 +35,7 @@ func (a *Analyzer) Analyze() (*Analysis, error) {
 	for _, c := range check.GetAllChecks() {
 		wg.Add(1)
 		go func(c check.Check) {
-			finder := find.New(os.DirFS(""), a.filter)
-			results, err := finder.Run(context.TODO(), c.Paths())
+			results, err := a.finder.Run(context.TODO(), c.Paths())
 			if err != nil {
 				logrus.Error(err)
 				return
