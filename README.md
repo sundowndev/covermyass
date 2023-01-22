@@ -1,6 +1,7 @@
 [![build status](https://github.com/sundowndev/covermyass/workflows/Go%20build/badge.svg)](https://github.com/sundowndev/covermyass/actions)
 [![Coverage Status](https://coveralls.io/repos/github/sundowndev/covermyass/badge.svg?branch=master)](https://coveralls.io/github/sundowndev/covermyass?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/sundowndev/covermyass/v2)](https://goreportcard.com/report/github.com/sundowndev/covermyass/v2)
+![GitHub all releases](https://img.shields.io/github/downloads/sundowndev/covermyass/total?color=brightgreen)
 
 # Introduction
 
@@ -128,7 +129,7 @@ $ covermyass -f '/foo/**/*.log' -f '/bar/foo.log'
 
 Covermyass is licensed under the MIT license. Refer to [LICENSE](LICENSE) for more information.
 
-## Support
+## Sponsorship
 
 <div align="center">
   <img src="https://github.com/sundowndev/static/raw/main/sponsors.svg?v=c68eba9" width="100%" heigh="auto" />
