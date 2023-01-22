@@ -6,7 +6,7 @@ import (
 	"github.com/sundowndev/covermyass/v2/lib/check"
 	"github.com/sundowndev/covermyass/v2/lib/filter"
 	"github.com/sundowndev/covermyass/v2/lib/find"
-	"github.com/sundowndev/covermyass/v2/lib/output"
+	"github.com/sundowndev/covermyass/v2/output"
 	"os"
 	"runtime"
 	"sync"

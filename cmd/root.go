@@ -8,8 +8,8 @@ import (
 	"github.com/sundowndev/covermyass/v2/build"
 	"github.com/sundowndev/covermyass/v2/lib/analysis"
 	"github.com/sundowndev/covermyass/v2/lib/filter"
-	"github.com/sundowndev/covermyass/v2/lib/output"
 	"github.com/sundowndev/covermyass/v2/lib/shred"
+	"github.com/sundowndev/covermyass/v2/output"
 	"os"
 	"time"
 )
