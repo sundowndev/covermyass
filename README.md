@@ -1,10 +1,12 @@
-# covermyass #
-
 [![build status](https://github.com/sundowndev/covermyass/workflows/Go%20build/badge.svg)](https://github.com/sundowndev/covermyass/actions)
-[![latest release](https://img.shields.io/github/v/release/sundowndev/covermyass)](https://github.com/sundowndev/covermyass/releases)
 [![Coverage Status](https://coveralls.io/repos/github/sundowndev/covermyass/badge.svg?branch=master)](https://coveralls.io/github/sundowndev/covermyass?branch=master)
+[![Go Report Card](https://goreportcard.com/badge/github.com/sundowndev/covermyass/v2)](https://goreportcard.com/report/github.com/sundowndev/covermyass/v2)
 
-Covermyass is a post-exploitation tool to cover your tracks on various operating systems (Linux, Darwin, Windows, ...). It was designed for penetration testing "covering tracks" phase, before exiting the compromised server. At any time, you can run the tool to find which log files exists on the system, then run again later to erase those files. The tool will tell you which file can be erased with the current user permissions. Files are overwritten repeatedly with random data, in order to make it harder for even very expensive hardware probing to recover the data.
+# Introduction
+
+Covermyass is a post-exploitation tool to cover your tracks on various operating systems. It was designed for penetration testing "covering tracks" phase, before exiting the compromised server. At any time, you can run the tool to find which log files exists on the system, then run again later to erase those files. The tool will tell you which file can be erased with the current user permissions. Files are overwritten repeatedly with random data, in order to make it harder for even very expensive hardware probing to recover the data.
+
+It supports the three major operating systems (Linux, macOS, Windows) and a few smaller ones (FreeBSD, OpenBSD).
 
 ### Current status ###
 
@@ -74,25 +76,52 @@ Flags:
   -v, --version          version for covermyass
       --write            Erase found log files. This WILL shred the files!
   -z, --zero             Add a final overwrite with zeros to hide shredding
-
 ```
 
 First, run an analysis. This will not erase anything.
 
 ```bash
-covermyass
+$ covermyass
+
+Loaded known log files for linux
+Scanning file system...
+
+Found the following files
+/var/log/lastlog (29.5 kB, -rw-rw-r--)
+/var/log/btmp (0 B, -rw-rw----)
+/var/log/wtmp (0 B, -rw-rw-r--)
+/var/log/faillog (3.2 kB, -rw-r--r--)
+
+Summary
+Found 4 files (4 read-write, 0 read-only) in 27ms
 ```
 
 When you acknowledged the results, erase those files.
 
 ```bash
-covermyass --write
+$ covermyass --write -n 100
+
+Loaded known log files for linux
+Scanning file system...
+
+Found the following files
+/var/log/lastlog (29.5 kB, -rw-rw-r--)
+/var/log/btmp (0 B, -rw-rw----)
+/var/log/wtmp (0 B, -rw-rw-r--)
+/var/log/faillog (3.2 kB, -rw-r--r--)
+
+Summary
+Found 4 files (4 read-write, 0 read-only) in 27ms
+
+⣾ Shredding files... (3.1 MB, 1.3 MB/s) [2s] 
+
+Successfully shredded 4 files 100 times
 ```
 
 Filter out some paths : 
 
 ```bash
-covermyass -f '/foo/**/*.log' -f '/bar/foo.log'
+$ covermyass -f '/foo/**/*.log' -f '/bar/foo.log'
 ```
 
 ### License ###
