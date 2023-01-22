@@ -74,7 +74,7 @@ func TestShredder_shred(t *testing.T) {
 	cases := []struct {
 		name      string
 		options   ShredderOptions
-		mocks     func(*mocks.FileInfo, *mocks.File)
+		mocks     func(*mocks.FileInfo, *mocks.File, *mocks.ProgressBar)
 		wantError error
 	}{
 		{
@@ -83,7 +83,7 @@ func TestShredder_shred(t *testing.T) {
 				Zero:       false,
 				Iterations: 3,
 			},
-			mocks: func(fakeFileInfo *mocks.FileInfo, fakeFile *mocks.File) {
+			mocks: func(fakeFileInfo *mocks.FileInfo, fakeFile *mocks.File, fakeBar *mocks.ProgressBar) {
 				fakeFileInfo.On("Size").Return(int64(0)).Times(1)
 			},
 		},
@@ -93,13 +93,17 @@ func TestShredder_shred(t *testing.T) {
 				Zero:       false,
 				Iterations: 3,
 			},
-			mocks: func(fakeFileInfo *mocks.FileInfo, fakeFile *mocks.File) {
+			mocks: func(fakeFileInfo *mocks.FileInfo, fakeFile *mocks.File, fakeBar *mocks.ProgressBar) {
 				fakeFileInfo.On("Size").Return(int64(64)).Times(2)
 
 				fakeFile.On("Sync").Return(nil).Times(3)
 				fakeFile.On("WriteAt", mock.MatchedBy(func(b []byte) bool {
 					return len(b) == 64
 				}), int64(0)).Return(0, nil).Times(3)
+
+				fakeBar.On("Write", mock.MatchedBy(func(b []byte) bool {
+					return len(b) == 64
+				})).Return(1, nil).Times(3)
 			},
 		},
 		{
@@ -108,13 +112,17 @@ func TestShredder_shred(t *testing.T) {
 				Zero:       false,
 				Iterations: 10,
 			},
-			mocks: func(fakeFileInfo *mocks.FileInfo, fakeFile *mocks.File) {
+			mocks: func(fakeFileInfo *mocks.FileInfo, fakeFile *mocks.File, fakeBar *mocks.ProgressBar) {
 				fakeFileInfo.On("Size").Return(int64(2000000)).Times(2)
 
 				fakeFile.On("Sync").Return(nil).Times(10)
 				fakeFile.On("WriteAt", mock.MatchedBy(func(b []byte) bool {
 					return len(b) == 2000000
 				}), int64(0)).Return(0, nil).Times(10)
+
+				fakeBar.On("Write", mock.MatchedBy(func(b []byte) bool {
+					return len(b) == 2000000
+				})).Return(1, nil).Times(10)
 			},
 		},
 		{
@@ -123,7 +131,7 @@ func TestShredder_shred(t *testing.T) {
 				Zero:       false,
 				Iterations: 3,
 			},
-			mocks: func(fakeFileInfo *mocks.FileInfo, fakeFile *mocks.File) {
+			mocks: func(fakeFileInfo *mocks.FileInfo, fakeFile *mocks.File, fakeBar *mocks.ProgressBar) {
 				fakeFileInfo.On("Size").Return(int64(2000)).Times(2)
 
 				fakeFile.On("WriteAt", mock.MatchedBy(func(b []byte) bool {
@@ -136,11 +144,14 @@ func TestShredder_shred(t *testing.T) {
 
 	for _, tt := range cases {
 		t.Run(tt.name, func(t *testing.T) {
+			fakeBar := &mocks.ProgressBar{}
+			tt.options.Bar = fakeBar
+
 			s := New(&tt.options)
 
 			fakeFileInfo := &mocks.FileInfo{}
 			fakeFile := &mocks.File{}
-			tt.mocks(fakeFileInfo, fakeFile)
+			tt.mocks(fakeFileInfo, fakeFile, fakeBar)
 
 			err := s.shred(fakeFileInfo, fakeFile)
 			if tt.wantError == nil {
@@ -151,6 +162,7 @@ func TestShredder_shred(t *testing.T) {
 
 			fakeFileInfo.AssertExpectations(t)
 			fakeFile.AssertExpectations(t)
+			fakeBar.AssertExpectations(t)
 		})
 	}
 }

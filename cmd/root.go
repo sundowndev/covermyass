@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/schollz/progressbar/v3"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/sundowndev/covermyass/v2/build"
@@ -10,6 +11,7 @@ import (
 	"github.com/sundowndev/covermyass/v2/lib/output"
 	"github.com/sundowndev/covermyass/v2/lib/shred"
 	"os"
+	"time"
 )
 
 type RootCmdOptions struct {
@@ -68,9 +70,27 @@ covermyass --write -z -n 5
 			a.Write(os.Stdout)
 
 			if opts.Write {
+				output.Printf("\n")
+				bar := progressbar.NewOptions64(
+					-1,
+					progressbar.OptionSetDescription("Shredding files..."),
+					progressbar.OptionSetWriter(output.GetPrinter()),
+					progressbar.OptionShowBytes(true),
+					progressbar.OptionSetWidth(10),
+					progressbar.OptionThrottle(65*time.Millisecond),
+					progressbar.OptionShowCount(),
+					progressbar.OptionOnCompletion(func() {
+						_, _ = fmt.Fprint(output.GetPrinter(), "\n")
+					}),
+					progressbar.OptionSpinnerType(11),
+					progressbar.OptionFullWidth(),
+					progressbar.OptionSetRenderBlankState(true),
+				)
+
 				shredOptions := &shred.ShredderOptions{
 					Zero:       opts.Zero,
 					Iterations: opts.Iterations,
+					Bar:        bar,
 				}
 				s := shred.New(shredOptions)
 				for _, result := range a.Results() {
@@ -81,7 +101,8 @@ covermyass --write -z -n 5
 						return fmt.Errorf("error writing file %s: %s", result.Path, err)
 					}
 				}
-				output.Printf("\nShredded %d files %d times\n", len(a.Results()), opts.Iterations)
+				_ = bar.Finish()
+				output.Printf("\nSuccessfully shredded %d files %d times\n", len(a.Results()), opts.Iterations)
 			}
 
 			return nil

@@ -26,9 +26,16 @@ type File interface {
 	Close() error
 }
 
+type ProgressBar interface {
+	Add(int) error
+	Write([]byte) (int, error)
+	Finish() error
+}
+
 type ShredderOptions struct {
 	Zero       bool
 	Iterations int
+	Bar        ProgressBar
 }
 
 type Shredder struct {
@@ -90,6 +97,9 @@ func (s *Shredder) shred(fstat FileInfo, file File) error {
 		if err != nil {
 			return err
 		}
+
+		// Add written bytes to progress bar
+		_, _ = s.options.Bar.Write(junkBuf)
 	}
 
 	return nil
