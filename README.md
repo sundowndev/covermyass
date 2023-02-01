@@ -61,9 +61,6 @@ Usage:
 
 Examples:
 
-Overwrite log files as well as those found by path /db/*.log
-covermyass --write -p /db/*.log
-
 Overwrite log files 5 times with a final overwrite with zeros to hide shredding
 covermyass --write -z -n 5
 
@@ -81,7 +78,7 @@ Flags:
 
 First, run an analysis. This will not erase anything.
 
-```bash
+```shell
 $ covermyass
 
 Loaded known log files for linux
@@ -99,7 +96,9 @@ Found 4 files (4 read-write, 0 read-only) in 27ms
 
 When you acknowledged the results, erase those files.
 
-```bash
+```shell
+$ whoami
+root
 $ covermyass --write -n 100
 
 Loaded known log files for linux
@@ -121,7 +120,7 @@ Successfully shredded 4 files 100 times
 
 Filter out some paths : 
 
-```bash
+```shell
 $ covermyass -f '/foo/**/*.log' -f '/bar/foo.log'
 ```
 
